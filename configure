@@ -4431,6 +4431,12 @@ fi
 
 if test "$ARCH" = "tci"; then
   linker_script=""
+elif test "$targetos" = "FreeBSD"; then
+  $ld --verbose 2>/dev/null | sed \
+   -e '1,/==================================================/d' \
+   -e '/==================================================/,$d' \
+   -e 's/0x400000/0x60000000/g' > ${config_host_ld}
+  linker_script="-Wl,-T../${config_host_ld}"
 else
   # generate list of library paths for linker script
   $ld --verbose -v 2> /dev/null | grep SEARCH_DIR > ${config_host_ld}
