@@ -4060,9 +4060,6 @@ if test "$gcov" = "yes" ; then
   echo "GCOV=$gcov_tool" >> $config_host_mak
 fi
 
-# generate list of library paths for linker script
-$ld --verbose -v 2> /dev/null | grep SEARCH_DIR > ${config_host_ld}
-
 # use included Linux headers
 if test "$linux" = "yes" ; then
   mkdir -p linux-headers
@@ -4435,6 +4432,8 @@ fi
 if test "$ARCH" = "tci"; then
   linker_script=""
 else
+  # generate list of library paths for linker script
+  $ld --verbose -v 2> /dev/null | grep SEARCH_DIR > ${config_host_ld}
   linker_script="-Wl,-T../${config_host_ld} -Wl,-T,\$(SRC_PATH)/ldscripts/\$(ARCH).ld"
 fi
 
