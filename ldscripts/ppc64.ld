@@ -1,6 +1,4 @@
 /* Script for -z combreloc: combine and sort reloc sections */
-OUTPUT_FORMAT("elf64-powerpc", "elf64-powerpc",
-	      "elf64-powerpc")
 OUTPUT_ARCH(powerpc:common64)
 ENTRY(_start)
 /* __DYNAMIC = 0;    */

@@ -1,6 +1,4 @@
 /* Default linker script, for normal executables */
-OUTPUT_FORMAT("elf32-hppa-linux", "elf32-hppa-linux",
-	      "elf32-hppa-linux")
 OUTPUT_ARCH(hppa:hppa1.1)
 ENTRY(_start)
 SECTIONS

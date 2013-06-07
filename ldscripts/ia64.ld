@@ -1,6 +1,4 @@
 /* Default linker script, for normal executables */
-OUTPUT_FORMAT("elf64-ia64-little", "elf64-ia64-little",
-	      "elf64-ia64-little")
 OUTPUT_ARCH(ia64)
 ENTRY(_start)
 /* __DYNAMIC = 0;    */

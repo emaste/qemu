@@ -4443,8 +4443,14 @@ fi
 if test "$ARCH" = "tci"; then
   linker_script=""
 else
-  # generate list of library paths for linker script
-  $ld --verbose -v 2> /dev/null | grep SEARCH_DIR > ${config_host_ld}
+  # Use library path list and output format of host's default linker script
+  $ld --verbose -v 2> /dev/null | sed -n '
+/SEARCH_DIR/p
+/OUTPUT_FORMAT.*)/p
+/OUTPUT_FORMAT[^)]*$/ {
+  N
+  /.*\n.*)/p
+}' > config-host.ld
   linker_script="-Wl,-T../config-host.ld -Wl,-T,\$(SRC_PATH)/ldscripts/\$(ARCH).ld"
 fi
 

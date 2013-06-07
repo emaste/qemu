@@ -1,5 +1,3 @@
-OUTPUT_FORMAT("elf64-alpha", "elf64-alpha",
-	      "elf64-alpha")
 OUTPUT_ARCH(alpha)
 ENTRY(__start)
 SECTIONS

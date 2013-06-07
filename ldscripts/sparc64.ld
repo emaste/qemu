@@ -1,5 +1,3 @@
-OUTPUT_FORMAT("elf64-sparc", "elf64-sparc",
-              "elf64-sparc")
 OUTPUT_ARCH(sparc:v9)
 ENTRY(_start)
 SECTIONS
