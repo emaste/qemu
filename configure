@@ -4072,9 +4072,6 @@ if test "$gcov" = "yes" ; then
   echo "GCOV=$gcov_tool" >> $config_host_mak
 fi
 
-# generate list of library paths for linker script
-$ld --verbose -v 2> /dev/null | grep SEARCH_DIR > config-host.ld
-
 # use included Linux headers
 if test "$linux" = "yes" ; then
   mkdir -p linux-headers
@@ -4437,21 +4434,33 @@ if test "$gprof" = "yes" ; then
   fi
 fi
 
-if test "$ARCH" = "tci"; then
-  linker_script=""
-else
-  linker_script="-Wl,-T../config-host.ld -Wl,-T,\$(SRC_PATH)/ldscripts/\$(ARCH).ld"
-fi
-
 if test "$target_linux_user" = "yes" -o "$target_bsd_user" = "yes" ; then
+  textseg_addr=
   case "$ARCH" in
-  alpha | s390x | aarch64)
-    # The default placement of the application is fine.
+  arm | hppa | i386 | ia64 | m68k | ppc | ppc64 | s390 | sparc | sparc64 | x86_64)
+    default_textseg_addr=0x400000
+    textseg_addr=0x60000000
     ;;
-  *)
-    ldflags="$linker_script $ldflags"
+  mips)
+    default_textseg_addr=0x120000000
+    textseg_addr=0x400000
     ;;
   esac
+  if [ -n "$textseg_addr" ]; then
+    try_ldflags="-Ttext-segment=$textseg_addr"
+    if $ld $try_ldflags /dev/null >/dev/null 2>&1; then
+      ldflags="$ldflags $try_ldflags"
+    else
+      # In case ld does not support -Ttext-segment, edit the default linker
+      # script via sed to set the .text start addr.  This is needed on FreeBSD
+      # at least.
+      $ld --verbose | sed \
+        -e '1,/==================================================/d' \
+        -e '/==================================================/,$d' \
+        -e "s/$default_textseg_addr/$textseg_addr/g" > config-host.ld
+      ldflags="$ldflags -Wl,-T../config-host.ld"
+    fi
+  fi
 fi
 
 echo "LDFLAGS+=$ldflags" >> $config_target_mak
