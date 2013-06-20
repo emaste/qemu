@@ -4438,11 +4438,9 @@ if test "$target_linux_user" = "yes" -o "$target_bsd_user" = "yes" ; then
   textseg_addr=
   case "$ARCH" in
   arm | hppa | i386 | ia64 | m68k | ppc | ppc64 | s390 | sparc | sparc64 | x86_64)
-    default_textseg_addr=0x400000
     textseg_addr=0x60000000
     ;;
   mips)
-    default_textseg_addr=0x120000000
     textseg_addr=0x400000
     ;;
   esac
@@ -4457,7 +4455,8 @@ if test "$target_linux_user" = "yes" -o "$target_bsd_user" = "yes" ; then
       $ld --verbose | sed \
         -e '1,/==================================================/d' \
         -e '/==================================================/,$d' \
-        -e "s/$default_textseg_addr/$textseg_addr/g" > config-host.ld
+        -e "s/[.] = [0-9a-fx]* [+] SIZEOF_HEADERS/. = $textseg_addr + SIZEOF_HEADERS/" \
+        -e "s/__executable_start = [0-9a-fx]*/__executable_start = $textseg_addr/" > config-host.ld
       ldflags="$ldflags -Wl,-T../config-host.ld"
     fi
   fi
