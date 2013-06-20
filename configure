@@ -4445,8 +4445,11 @@ if test "$target_linux_user" = "yes" -o "$target_bsd_user" = "yes" ; then
     ;;
   esac
   if [ -n "$textseg_addr" ]; then
+cat > $TMPC <<EOF
+int main(void) { return 0; }
+EOF
     try_ldflags="-Ttext-segment=$textseg_addr"
-    if $ld $try_ldflags /dev/null >/dev/null 2>&1; then
+    if compile_prog "" "$try_ldflags"; then
       ldflags="$ldflags $try_ldflags"
     else
       # In case ld does not support -Ttext-segment, edit the default linker
