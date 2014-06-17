@@ -12,10 +12,10 @@
 
 #ifndef _WIN32
 #include <netdb.h>
-#define closesocket(x) close(x)
 #endif
 
 #include "qemu-common.h"
+#include "qemu/sockets.h"
 
 #include "vscard_common.h"
 
