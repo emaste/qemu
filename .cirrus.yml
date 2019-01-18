@@ -7,11 +7,11 @@ freebsd_12_task:
     CIRRUS_CLONE_DEPTH: 1
   install_script: pkg install -y
     bison curl cyrus-sasl git glib gmake gnutls
-    nettle perl5 pixman pkgconf png usbredir
+    nettle perl5 pixman pkgconf png pstree usbredir
   script:
     - echo "Running with hw.ncpu=$(sysctl -n hw.ncpu)"
     - mkdir build
     - cd build
     - ../configure || { cat config.log; exit 1; }
     - gmake -j8
-    - gmake -j8 V=1 check
+    - timeout 30m gmake -j8 V=1 check || { echo failed, rc=$?; pstree; dmesg | tail; exit 1; }
