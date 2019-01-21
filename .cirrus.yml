@@ -9,6 +9,7 @@ freebsd_12_task:
     bison curl cyrus-sasl git glib gmake gnutls
     nettle perl5 pixman pkgconf png usbredir
   script:
+    - echo "Running with hw.ncpu=$(sysctl -n hw.ncpu)"
     - mkdir build
     - cd build
     - ../configure || { cat config.log; exit 1; }
