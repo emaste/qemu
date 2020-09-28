@@ -6,8 +6,6 @@
 #ifdef CONFIG_MACHINE_BSWAP_H
 # include <sys/endian.h>
 # include <machine/bswap.h>
-#elif defined(__FreeBSD__)
-# include <sys/endian.h>
 #elif defined(__HAIKU__)
 # include <endian.h>
 #elif defined(CONFIG_BYTESWAP_H)
